@@ -1,6 +1,6 @@
 allow_embedding: false
-name: Custom HTML 2
-package_name: Custom_HTML_2
+name: Connect-4
+package_name: Connect_4
 runtime_options:
   client_version: '3'
   server_spec: {base: python310-minimal}

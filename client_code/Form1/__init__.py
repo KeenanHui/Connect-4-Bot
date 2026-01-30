@@ -1,284 +1,108 @@
-"""
 from ._anvil_designer import Form1Template
 from anvil import *
+from anvil.js import get_dom_node  # ✅ supported way to style DOM
 
 class Form1(Form1Template):
   def __init__(self, **properties):
     self.init_components(**properties)
-
-    # Example tensor (replace with your real one)
-    board = [[[0.0, 0.0] for _ in range(7)] for _ in range(6)]
-    board[5][6] = [0.0, 1.0]  # yellow
-
-    self.set_board(board)
-
-  def set_board(self, tensor):
-    def disc_class(cell):
-      a, b = cell[0], cell[1]
-      if a > 0.5 and b < 0.5:
-        return "c4-disc c4-red"
-      if b > 0.5 and a < 0.5:
-        return "c4-disc c4-yellow"
-      return "c4-disc"
-
-    parts = ['<div class="c4-board">']
-    for r in range(6):
-      for c in range(7):
-        parts.append(f'<div class="{disc_class(tensor[r][c])}"></div>')
-    parts.append('</div>')
-
-    self.dom_nodes["board_root"].innerHTML = "".join(parts)
-"""
-
-"""
-from ._anvil_designer import Form1Template
-from anvil import *
-
-class Form1(Form1Template):
-  def __init__(self, **properties):
-    self.init_components(**properties)
-
-    self.board = [[[0.0, 0.0] for _ in range(7)] for _ in range(6)]
-    self.player = 0  # 0=red, 1=yellow
-    self.render_board()
-
-  def render_board(self):
-    def disc_class(cell):
-      a, b = cell
-      if a > 0.5: return "c4-disc c4-red"
-      if b > 0.5: return "c4-disc c4-yellow"
-      return "c4-disc"
-
-    parts = ['<div class="c4-board">']
-    for r in range(6):
-      for c in range(7):
-        parts.append(f'<div class="{disc_class(self.board[r][c])}"></div>')
-    parts.append('</div>')
-    self.dom_nodes["board_root"].innerHTML = "".join(parts)
-
-  def drop_piece(self, col: int):
-    for r in range(5, -1, -1):
-      if self.board[r][col][0] == 0.0 and self.board[r][col][1] == 0.0:
-        self.board[r][col] = [1.0, 0.0] if self.player == 0 else [0.0, 1.0]
-        self.player = 1 - self.player
-        self.render_board()
-        return
-    Notification("Column is full").show()
-
-  @handle("ov0_btn", "click")
-  def ov0_btn_click(self, **e): self.drop_piece(0)
-
-  @handle("ov1_btn", "click")
-  def ov1_btn_click(self, **e): self.drop_piece(1)
-
-  @handle("ov2_btn", "click")
-  def ov2_btn_click(self, **e): self.drop_piece(2)
-
-  @handle("ov3_btn", "click")
-  def ov3_btn_click(self, **e): self.drop_piece(3)
-
-  @handle("ov4_btn", "click")
-  def ov4_btn_click(self, **e): self.drop_piece(4)
-
-  @handle("ov5_btn", "click")
-  def ov5_btn_click(self, **e): self.drop_piece(5)
-
-  @handle("ov6_btn", "click")
-  def ov6_btn_click(self, **e): self.drop_piece(6)
-"""
-
-"""
-from ._anvil_designer import Form1Template
-from anvil import *
-
-class Form1(Form1Template):
-  def __init__(self, **properties):
-    self.init_components(**properties)
-
-    # Game state: 6x7x2 tensor
-    self.board = [[[0.0, 0.0] for _ in range(7)] for _ in range(6)]
-    self.player = 0  # 0 = red, 1 = yellow
-
-    self.render_board()
-
-  # ---------- Rendering ----------
-  def render_board(self):
-    def disc_class(cell):
-      a, b = cell
-      if a > 0.5:
-        return "c4-disc c4-red"
-      if b > 0.5:
-        return "c4-disc c4-yellow"
-      return "c4-disc"
-
-    parts = ['<div class="c4-board">']
-    for r in range(6):
-      for c in range(7):
-        parts.append(f'<div class="{disc_class(self.board[r][c])}"></div>')
-    parts.append('</div>')
-
-    # board_root must exist in Form1 Edit HTML:
-    # <div anvil-name="board_root"></div>
-    self.dom_nodes["board_root"].innerHTML = "".join(parts)
-
-  # ---------- Game logic ----------
-  def drop_piece(self, col: int):
-    # Find lowest empty slot in this column
-    for r in range(5, -1, -1):
-      if self.board[r][col][0] == 0.0 and self.board[r][col][1] == 0.0:
-        # Place piece for current player
-        self.board[r][col] = [1.0, 0.0] if self.player == 0 else [0.0, 1.0]
-        self.player = 1 - self.player
-        self.render_board()
-        return
-
-    Notification("Column is full").show()
-
-  # ---------- Overlay button handlers ----------
-  @handle("ov0_btn", "click")
-  def ov0_btn_click(self, **e): self.drop_piece(0)
-
-  @handle("ov1_btn", "click")
-  def ov1_btn_click(self, **e): self.drop_piece(1)
-
-  @handle("ov2_btn", "click")
-  def ov2_btn_click(self, **e): self.drop_piece(2)
-
-  @handle("ov3_btn", "click")
-  def ov3_btn_click(self, **e): self.drop_piece(3)
-
-  @handle("ov4_btn", "click")
-  def ov4_btn_click(self, **e): self.drop_piece(4)
-
-  @handle("ov5_btn", "click")
-  def ov5_btn_click(self, **e): self.drop_piece(5)
-
-  @handle("ov6_btn", "click")
-  def ov6_btn_click(self, **e): self.drop_piece(6)
-"""
-
-"""
-from ._anvil_designer import Form1Template
-from anvil import *
-
-class Form1(Form1Template):
-  def __init__(self, **properties):
-    self.init_components(**properties)
-
-    # 6x7x2 tensor: red=[1,0], yellow=[0,1], empty=[0,0]
-    self.board = [[[0.0, 0.0] for _ in range(7)] for _ in range(6)]
-    self.player = 0  # 0=red, 1=yellow
-
-    self.render_board()
-
-  # ---------- Rendering ----------
-  def render_board(self):
-    def disc_class(cell):
-      a, b = cell
-      if a > 0.5:
-        return "c4-disc c4-red"
-      if b > 0.5:
-        return "c4-disc c4-yellow"
-      return "c4-disc"
-
-    parts = ['<div class="c4-board">']
-    for r in range(6):
-      for c in range(7):
-        parts.append(f'<div class="{disc_class(self.board[r][c])}"></div>')
-    parts.append('</div>')
-
-    self.dom_nodes["board_root"].innerHTML = "".join(parts)
-
-  # ---------- Game logic ----------
-  def drop_piece(self, col: int):
-    # Find lowest empty row in the column
-    for r in range(5, -1, -1):
-      if self.board[r][col][0] == 0.0 and self.board[r][col][1] == 0.0:
-        self.board[r][col] = [1.0, 0.0] if self.player == 0 else [0.0, 1.0]
-        self.player = 1 - self.player
-        self.render_board()
-        return
-
-    Notification("Column is full").show()
-
-  # ---------- Overlay button handlers ----------
-  @handle("ov0_btn", "click")
-  def ov0_btn_click(self, **e): self.drop_piece(0)
-
-  @handle("ov1_btn", "click")
-  def ov1_btn_click(self, **e): self.drop_piece(1)
-
-  @handle("ov2_btn", "click")
-  def ov2_btn_click(self, **e): self.drop_piece(2)
-
-  @handle("ov3_btn", "click")
-  def ov3_btn_click(self, **e): self.drop_piece(3)
-
-  @handle("ov4_btn", "click")
-  def ov4_btn_click(self, **e): self.drop_piece(4)
-
-  @handle("ov5_btn", "click")
-  def ov5_btn_click(self, **e): self.drop_piece(5)
-
-  @handle("ov6_btn", "click")
-  def ov6_btn_click(self, **e): self.drop_piece(6)
-"""
-
-from ._anvil_designer import Form1Template
-from anvil import *
-
-class Form1(Form1Template):
-  def __init__(self, **properties):
-    self.init_components(**properties)
-
-    # Safety: ensure buttons are children of overlay_panel
-    for b in [
-      self.ov0_btn, self.ov1_btn, self.ov2_btn,
-      self.ov3_btn, self.ov4_btn, self.ov5_btn, self.ov6_btn
-    ]:
-      if b.parent is not self.overlay_panel:
-        b.remove_from_parent()
-        self.overlay_panel.add_component(b)
 
     self.board = [[[0.0, 0.0] for _ in range(7)] for _ in range(6)]
     self.player = 0
+
+    self.overlay_panel.role = "c4_overlay"
+
+    # keep references to buttons so we can update their ghost positions
+    self.col_buttons = []
+
+    self._build_overlay_buttons()
     self.render_board()
 
+  def _make_drop_handler(self, col):
+    def handler(**e):
+      self.drop_piece(col)
+    return handler
+
+  def _build_overlay_buttons(self):
+    self.overlay_panel.clear()
+    self.col_buttons = []
+
+    for col in range(7):
+      btn = Button(text="", role="c4_col_btn")
+      btn.set_event_handler("click", self._make_drop_handler(col))
+      self.overlay_panel.add_component(btn)
+      self.col_buttons.append(btn)
+
+  def _landing_row_for_col(self, col: int):
+    """
+    Returns the row index (0=top..5=bottom) where a new piece would land.
+    Returns None if the column is full.
+    """
+    for r in range(5, -1, -1):
+      if self.board[r][col][0] == 0.0 and self.board[r][col][1] == 0.0:
+        return r
+    return None
+
+  def _update_ghost_positions(self):
+    """
+    Sets a CSS variable --ghost-y on each column button so the CSS pseudo-element
+    can appear at the correct landing row.
+    """
+    # Must match your CSS variables:
+    cell = 42
+    gap = 8
+    pad = 12
+
+    for col, btn in enumerate(self.col_buttons):
+      r = self._landing_row_for_col(col)
+      dom = get_dom_node(btn)
+
+      if r is None:
+        # Column full: hide ghost (optional)
+        dom.classList.add("c4-full")
+        dom.style.removeProperty("--ghost-y")
+      else:
+        dom.classList.remove("c4-full")
+        GHOST_RAISE = 12
+        y = pad + r * (cell + gap) - GHOST_RAISE
+
+        #y = pad + r * (cell + gap)   # top position of that cell in px
+        dom.style.setProperty("--ghost-y", f"{y}px")
+
+  def _sync_turn_classes(self):
+    shell = self.dom_nodes.get("board_shell")
+    if shell is None:
+      return
+    shell.classList.remove("player-red", "player-yellow")
+    shell.classList.add("player-red" if self.player == 0 else "player-yellow")
+
   def render_board(self):
+    self._sync_turn_classes()
     def disc_class(cell):
       a, b = cell
       if a > 0.5: return "c4-disc c4-red"
       if b > 0.5: return "c4-disc c4-yellow"
       return "c4-disc"
 
-    parts = ['<div class="c4-board">']
+    # Add a wrapper div that we can tag with the current player
+    turn_class = "player-red" if self.player == 0 else "player-yellow"
+  
+    parts = [f'<div class="c4-stage {turn_class}">']
+    parts.append('<div class="c4-board">')
     for r in range(6):
       for c in range(7):
         parts.append(f'<div class="{disc_class(self.board[r][c])}"></div>')
-    parts.append('</div>')
-
+    parts.append('</div></div>')  # close c4-board + c4-stage
+  
     self.dom_nodes["board_root"].innerHTML = "".join(parts)
+    self._update_ghost_positions()
 
   def drop_piece(self, col: int):
-    for r in range(5, -1, -1):
-      if self.board[r][col][0] == 0.0 and self.board[r][col][1] == 0.0:
-        self.board[r][col] = [1.0, 0.0] if self.player == 0 else [0.0, 1.0]
-        self.player = 1 - self.player
-        self.render_board()
-        return
-    Notification("Column is full").show()
+    r = self._landing_row_for_col(col)
+    if r is None:
+      Notification("Column is full").show()
+      return
 
-  @handle("ov0_btn", "click")
-  def ov0_btn_click(self, **e): self.drop_piece(0)
-  @handle("ov1_btn", "click")
-  def ov1_btn_click(self, **e): self.drop_piece(1)
-  @handle("ov2_btn", "click")
-  def ov2_btn_click(self, **e): self.drop_piece(2)
-  @handle("ov3_btn", "click")
-  def ov3_btn_click(self, **e): self.drop_piece(3)
-  @handle("ov4_btn", "click")
-  def ov4_btn_click(self, **e): self.drop_piece(4)
-  @handle("ov5_btn", "click")
-  def ov5_btn_click(self, **e): self.drop_piece(5)
-  @handle("ov6_btn", "click")
-  def ov6_btn_click(self, **e): self.drop_piece(6)
+    self.board[r][col] = [1.0, 0.0] if self.player == 0 else [0.0, 1.0]
+    self.player = 1 - self.player
+    self.render_board()
+    

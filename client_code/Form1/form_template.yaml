@@ -28,9 +28,9 @@ components:
     name: ov6_btn
     properties: {text: button_7}
     type: Button
-  layout_properties: {slot: default}
+  layout_properties: {slot: overlay_panel}
   name: overlay_panel
-  properties: {col_widths: '{}', role: c4_overlay}
+  properties: {col_widths: '{"AVPFEN":9,"DKLJFC":9,"WSYGXQ":9,"SEZTHU":9,"EYTEFE":8,"PILNJL":8,"YTMCHB":8}', role: c4_overlay, visible: true}
   type: ColumnPanel
 container:
   properties: {html: '@theme:standard-page.html'}

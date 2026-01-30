@@ -1,4 +1,7 @@
-/* ---------- Page ---------- */
+/* =========================================================
+Page / Layout
+========================================================= */
+
 html, body { height: 100%; }
 
 body {
@@ -12,25 +15,6 @@ body {
   max-width: 1100px;
   margin: 0 auto;
   padding: 20px;
-}
-
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: #ffffff;
-  border-bottom: 1px solid #000000;
-}
-
-.header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.brand {
-  font-weight: 800;
-  letter-spacing: 0.3px;
 }
 
 .main { padding-top: 28px; }
@@ -59,13 +43,33 @@ body {
   color: #000000;
 }
 
-/* Center the board */
-.board-wrap {
-  display: flex;
-  justify-content: center;
+/* =========================================================
+Header
+========================================================= */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #ffffff;
+  border-bottom: 1px solid #000000;
 }
 
-/* ---------- Connect 4 geometry ---------- */
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+/* =========================================================
+Board Geometry
+========================================================= */
+
 :root{
   --c4-cell: 42px;
   --c4-gap: 8px;
@@ -73,28 +77,51 @@ body {
   --c4-cols: 7;
   --c4-rows: 6;
 
-  --c4-board-w: calc((var(--c4-cols) * var(--c4-cell)) + ((var(--c4-cols) - 1) * var(--c4-gap)) + (2 * var(--c4-pad)));
-  --c4-board-h: calc((var(--c4-rows) * var(--c4-cell)) + ((var(--c4-rows) - 1) * var(--c4-gap)) + (2 * var(--c4-pad)));
+  --c4-board-w: calc(
+    (var(--c4-cols) * var(--c4-cell)) +
+    ((var(--c4-cols) - 1) * var(--c4-gap)) +
+    (2 * var(--c4-pad))
+  );
+
+  --c4-board-h: calc(
+    (var(--c4-rows) * var(--c4-cell)) +
+    ((var(--c4-rows) - 1) * var(--c4-gap)) +
+    (2 * var(--c4-pad))
+  );
 }
 
-/* Wrapper that holds overlay + board together */
+/* =========================================================
+Board Positioning / Anchors
+========================================================= */
+
+.board-wrap {
+  display: flex;
+  justify-content: center;
+}
+
 .board-shell{
   position: relative;
   width: var(--c4-board-w);
   height: var(--c4-board-h);
 }
 
-/* Board rendering */
+/* =========================================================
+Connect 4 Board (rendered HTML)
+========================================================= */
+
 .c4-board{
+  position: absolute;
+  inset: 0;
+
   display: grid;
   grid-template-columns: repeat(var(--c4-cols), var(--c4-cell));
   gap: var(--c4-gap);
-  background: #0b43ff;
+
   padding: var(--c4-pad);
-  border-radius: 6px;
-  width: var(--c4-board-w);
-  height: var(--c4-board-h);
   box-sizing: border-box;
+
+  background: #0b43ff;
+  border-radius: 6px;
 }
 
 .c4-disc{
@@ -104,59 +131,124 @@ body {
   background: #ffffff;
 }
 
-.c4-red { background: #e53935; }
+.c4-red    { background: #e53935; }
 .c4-yellow { background: #fdd835; }
 
-/* ---------- Overlay (Anvil Role) ---------- */
-/* overlay_panel Role in Designer MUST be: c4_overlay
-Anvil generates this class: .anvil-role-c4_overlay */
-/* Overlay wrapper (stays in DOM) */
-/* ---------- Overlay (Anvil-compatible) ---------- */
+/* =========================================================
+Overlay Layer (sits above board)
+========================================================= */
 
-/* Wrapper defined in HTML */
-.c4-overlay {
+.c4-overlay{
   position: absolute;
   inset: 0;
   z-index: 50;
+}
 
-  display: grid;
-  grid-template-columns: repeat(var(--c4-cols), var(--c4-cell));
-  gap: var(--c4-gap);
+/* Overlay panel role (supports underscore OR hyphen) */
+.anvil-role-c4_overlay,
+.anvil-role-c4-overlay{
+  position: absolute;
+  inset: 0;
+
+  display: grid !important;
+  grid-template-columns: repeat(var(--c4-cols), var(--c4-cell)) !important;
+  column-gap: var(--c4-gap) !important;
+
   padding: var(--c4-pad);
   box-sizing: border-box;
+  align-items: stretch;
 }
 
-/* The ColumnPanel itself should not impose layout */
-.anvil-role-c4_overlay {
-  display: contents;
-}
-
-/* Each Anvil component wrapper = one grid column */
-.c4-overlay .anvil-component {
+/* Each child component = one column hit-area */
+.anvil-role-c4_overlay .anvil-component,
+.anvil-role-c4-overlay .anvil-component{
   width: var(--c4-cell) !important;
   height: calc(var(--c4-board-h) - (2 * var(--c4-pad))) !important;
 }
 
-/* Actual clickable button fills column */
-.c4-overlay .anvil-component button,
-.c4-overlay .anvil-component .anvil-button {
-  width: 100% !important;
-  height: 100% !important;
-
-  background: rgba(255, 0, 0, 0.25);   /* DEBUG: visible hit-area */
-  border: 2px dashed red;
-  padding: 0 !important;
-  margin: 0 !important;
-  cursor: pointer;
+/* Move the entire overlay grid up to get it aligned with the board*/
+.anvil-role-c4_overlay,
+.anvil-role-c4-overlay{
+  transform: translateY(-5px);   /* try -6px to -16px */
 }
 
 
+/* =========================================================
+Column Buttons + Ghost Disc Hover (CSS-only)
+========================================================= */
 
-/* Optional: outline the whole overlay panel for alignment */
-/* .anvil-role-c4_overlay { outline: 4px solid magenta !important; } */
+.anvil-role-c4_col_btn,
+.anvil-role-c4-col-btn,
+.anvil-role-c4_col_btn button,
+.anvil-role-c4-col-btn button{
+  position: relative;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  cursor: pointer !important;
+}
 
 
-/* ---------- Drawer (CSS-only) ---------- */
+/* ghost disc */
+.anvil-role-c4_col_btn::before,
+.anvil-role-c4-col-btn::before{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: var(--ghost-y, 0px);
+  width: var(--c4-cell);
+  height: var(--c4-cell);
+  border-radius: 50%;
+
+  /* start slightly above the landing cell */
+  transform: translate(-50%, -600px);
+  opacity: 0;
+
+  background: rgba(229,57,53,0.85); /* red default */
+  box-shadow: 0 8px 18px rgba(229,57,53,0.35);
+
+  transition: opacity 140ms ease, transform 540ms ease;
+}
+
+/* show ghost on hover */
+.anvil-role-c4_col_btn:hover::before,
+.anvil-role-c4-col-btn:hover::before{
+  opacity: 0.6;
+  transform: translate(-50%, 0);
+}
+
+/* Turn-based ghost colors (Python must add player-red/player-yellow class somewhere) */
+/* Default ghost (red) */
+.anvil-role-c4_col_btn::before,
+.anvil-role-c4-col-btn::before{
+  background: rgba(229,57,53,0.85);
+  box-shadow: 0 8px 18px rgba(229,57,53,0.35);
+}
+
+/* Yellow turn ghost */
+.player-yellow .anvil-role-c4_col_btn::before,
+.player-yellow .anvil-role-c4-col-btn::before{
+  background: rgba(253,216,53,0.90);
+  box-shadow: 0 8px 18px rgba(253,216,53,0.45);
+}
+
+/* Red turn ghost (optional explicit) */
+.player-red .anvil-role-c4_col_btn::before,
+.player-red .anvil-role-c4-col-btn::before{
+  background: rgba(229,57,53,0.85);
+  box-shadow: 0 8px 18px rgba(229,57,53,0.35);
+}
+
+/* =========================================================
+Drawer (CSS-only)
+========================================================= */
+
 .drawer-toggle {
   position: fixed;
   left: -9999px;
@@ -198,9 +290,7 @@ Anvil generates this class: .anvil-role-c4_overlay */
   flex-direction: column;
 }
 
-.drawer-toggle:checked ~ .drawer {
-  transform: translateX(0);
-}
+.drawer-toggle:checked ~ .drawer { transform: translateX(0); }
 .drawer-toggle:checked ~ .drawer-backdrop {
   opacity: 1;
   pointer-events: auto;

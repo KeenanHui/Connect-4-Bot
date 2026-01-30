@@ -1,7 +1,47 @@
 components:
-- layout_properties: {slot: default}
-  name: content_panel
-  properties: {}
+- components:
+  - components:
+    - layout_properties: {}
+      name: ov0_btn
+      properties: {text: button_1}
+      type: Button
+    - layout_properties: {}
+      name: ov1_btn
+      properties: {text: button_2}
+      type: Button
+    - layout_properties: {}
+      name: ov2_btn
+      properties: {text: button_3}
+      type: Button
+    - layout_properties: {}
+      name: ov3_btn
+      properties: {text: button_4}
+      type: Button
+    - layout_properties: {}
+      name: ov4_btn
+      properties: {text: button_5}
+      type: Button
+    - layout_properties: {}
+      name: ov5_btn
+      properties: {text: button_6}
+      type: Button
+    - layout_properties: {}
+      name: ov6_btn
+      properties: {text: button_7}
+      type: Button
+    data_bindings: []
+    layout_properties: {grid_position: 'GLFVIJ,DWWFID'}
+    name: overlay_panel
+    properties:
+      align: left
+      role: c4_overlay
+      spacing:
+        margin: [null, 0, null, null]
+      visible: true
+    type: FlowPanel
+  layout_properties: {slot: default}
+  name: board_stack
+  properties: {col_widths: '{}'}
   type: ColumnPanel
 container:
   properties: {html: '@theme:standard-page.html'}

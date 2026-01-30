@@ -1,19 +1,249 @@
-.c4-board {
-  display: grid;
-  grid-template-columns: repeat(7, 42px);
-  gap: 8px;
-  background: #0b43ff;
-  padding: 12px;
-  border-radius: 6px;
-  width: max-content;
+/* ---------- Page ---------- */
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: #ffffff;
+  color: #000000;
 }
 
-.c4-disc {
-  width: 42px;
-  height: 42px;
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #ffffff;
+  border-bottom: 1px solid #000000;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.main { padding-top: 28px; }
+
+.card {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.page-title {
+  margin: 0 0 6px 0;
+  font-size: 26px;
+}
+
+.subtitle {
+  margin: 0 0 18px 0;
+  color: #000000;
+}
+
+.site-footer {
+  border-top: 1px solid #000000;
+  margin-top: 30px;
+  padding: 16px 0;
+  color: #000000;
+}
+
+/* Center the board */
+.board-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- Connect 4 geometry ---------- */
+:root{
+  --c4-cell: 42px;
+  --c4-gap: 8px;
+  --c4-pad: 12px;
+  --c4-cols: 7;
+  --c4-rows: 6;
+
+  --c4-board-w: calc((var(--c4-cols) * var(--c4-cell)) + ((var(--c4-cols) - 1) * var(--c4-gap)) + (2 * var(--c4-pad)));
+  --c4-board-h: calc((var(--c4-rows) * var(--c4-cell)) + ((var(--c4-rows) - 1) * var(--c4-gap)) + (2 * var(--c4-pad)));
+}
+
+/* Wrapper that holds overlay + board together */
+.board-shell{
+  position: relative;
+  width: var(--c4-board-w);
+  height: var(--c4-board-h);
+}
+
+/* Board rendering */
+.c4-board{
+  display: grid;
+  grid-template-columns: repeat(var(--c4-cols), var(--c4-cell));
+  gap: var(--c4-gap);
+  background: #0b43ff;
+  padding: var(--c4-pad);
+  border-radius: 6px;
+  width: var(--c4-board-w);
+  height: var(--c4-board-h);
+  box-sizing: border-box;
+}
+
+.c4-disc{
+  width: var(--c4-cell);
+  height: var(--c4-cell);
   border-radius: 50%;
   background: #ffffff;
 }
 
 .c4-red { background: #e53935; }
 .c4-yellow { background: #fdd835; }
+
+/* ---------- Overlay (ROLE-based) ---------- */
+/* overlay_panel Role must be: c4_overlay */
+[role="c4_overlay"]{
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+
+  display: grid;
+  grid-template-columns: repeat(var(--c4-cols), var(--c4-cell));
+  gap: var(--c4-gap);
+  padding: var(--c4-pad);
+  box-sizing: border-box;
+
+  align-items: stretch;
+}
+
+/* DEBUG ON: show overlay click zones (7 columns) */
+/*
+[role="c4_overlay"] button{
+  width: var(--c4-cell) !important;
+  height: calc(var(--c4-board-h) - (2 * var(--c4-pad))) !important;
+
+  background: rgba(255,0,0,0.25) !important;
+  border: 2px dashed red !important;
+  opacity: 1 !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+}
+*/
+
+/* DEBUG: show ANY clickable control inside overlay_panel */
+[role="c4_overlay"] * {
+  outline: 1px solid rgba(255,0,0,0.35);
+}
+
+[role="c4_overlay"] button,
+[role="c4_overlay"] a,
+[role="c4_overlay"] .anvil-button,
+[role="c4_overlay"] .button {
+  width: var(--c4-cell) !important;
+  height: calc(var(--c4-board-h) - (2 * var(--c4-pad))) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: rgba(255,0,0,0.25) !important;
+  border: 2px dashed red !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+}
+
+[role="c4_overlay"] {
+  background: transparent !important;
+}
+[role="c4_overlay"] .anvil-panel-section,
+[role="c4_overlay"] .anvil-container {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+
+/* Optional: outline the whole overlay panel for alignment */
+/* [role="c4_overlay"] { outline: 4px solid magenta !important; } */
+
+
+/* ---------- Drawer (CSS-only) ---------- */
+.drawer-toggle {
+  position: fixed;
+  left: -9999px;
+}
+
+.nav-link {
+  color: #000000;
+  cursor: pointer;
+  margin-left: 16px;
+  user-select: none;
+}
+.nav-link:hover { color: #0b43ff; }
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 999;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 340px;
+  background: #ffffff;
+  color: #111111;
+  box-shadow: -8px 0 24px rgba(0,0,0,0.2);
+
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-toggle:checked ~ .drawer {
+  transform: translateX(0);
+}
+.drawer-toggle:checked ~ .drawer-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer-header {
+  padding: 16px;
+  border-bottom: 1px solid #000000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-content {
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.drawer-close {
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 10px;
+  user-select: none;
+}
+.drawer-close:hover {
+  background: rgba(0,0,0,0.06);
+}

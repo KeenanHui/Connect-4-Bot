@@ -231,6 +231,15 @@ class Form1(Form1Template):
   def __init__(self, **properties):
     self.init_components(**properties)
 
+    # Safety: ensure buttons are children of overlay_panel
+    for b in [
+      self.ov0_btn, self.ov1_btn, self.ov2_btn,
+      self.ov3_btn, self.ov4_btn, self.ov5_btn, self.ov6_btn
+    ]:
+      if b.parent is not self.overlay_panel:
+        b.remove_from_parent()
+        self.overlay_panel.add_component(b)
+
     self.board = [[[0.0, 0.0] for _ in range(7)] for _ in range(6)]
     self.player = 0
     self.render_board()

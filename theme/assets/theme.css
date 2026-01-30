@@ -107,9 +107,14 @@ body {
 .c4-red { background: #e53935; }
 .c4-yellow { background: #fdd835; }
 
-/* ---------- Overlay (ROLE-based) ---------- */
-/* overlay_panel Role must be: c4_overlay */
-[role="c4_overlay"]{
+/* ---------- Overlay (Anvil Role) ---------- */
+/* overlay_panel Role in Designer MUST be: c4_overlay
+Anvil generates this class: .anvil-role-c4_overlay */
+/* Overlay wrapper (stays in DOM) */
+/* ---------- Overlay (Anvil-compatible) ---------- */
+
+/* Wrapper defined in HTML */
+.c4-overlay {
   position: absolute;
   inset: 0;
   z-index: 50;
@@ -119,58 +124,36 @@ body {
   gap: var(--c4-gap);
   padding: var(--c4-pad);
   box-sizing: border-box;
-
-  align-items: stretch;
 }
 
-/* DEBUG ON: show overlay click zones (7 columns) */
-/*
-[role="c4_overlay"] button{
+/* The ColumnPanel itself should not impose layout */
+.anvil-role-c4_overlay {
+  display: contents;
+}
+
+/* Each Anvil component wrapper = one grid column */
+.c4-overlay .anvil-component {
   width: var(--c4-cell) !important;
   height: calc(var(--c4-board-h) - (2 * var(--c4-pad))) !important;
+}
 
-  background: rgba(255,0,0,0.25) !important;
-  border: 2px dashed red !important;
-  opacity: 1 !important;
+/* Actual clickable button fills column */
+.c4-overlay .anvil-component button,
+.c4-overlay .anvil-component .anvil-button {
+  width: 100% !important;
+  height: 100% !important;
 
+  background: rgba(255, 0, 0, 0.25);   /* DEBUG: visible hit-area */
+  border: 2px dashed red;
   padding: 0 !important;
   margin: 0 !important;
-  cursor: pointer !important;
-}
-*/
-
-/* DEBUG: show ANY clickable control inside overlay_panel */
-[role="c4_overlay"] * {
-  outline: 1px solid rgba(255,0,0,0.35);
+  cursor: pointer;
 }
 
-[role="c4_overlay"] button,
-[role="c4_overlay"] a,
-[role="c4_overlay"] .anvil-button,
-[role="c4_overlay"] .button {
-  width: var(--c4-cell) !important;
-  height: calc(var(--c4-board-h) - (2 * var(--c4-pad))) !important;
-  padding: 0 !important;
-  margin: 0 !important;
-
-  background: rgba(255,0,0,0.25) !important;
-  border: 2px dashed red !important;
-  opacity: 1 !important;
-  cursor: pointer !important;
-}
-
-[role="c4_overlay"] {
-  background: transparent !important;
-}
-[role="c4_overlay"] .anvil-panel-section,
-[role="c4_overlay"] .anvil-container {
-  padding: 0 !important;
-  margin: 0 !important;
-}
 
 
 /* Optional: outline the whole overlay panel for alignment */
-/* [role="c4_overlay"] { outline: 4px solid magenta !important; } */
+/* .anvil-role-c4_overlay { outline: 4px solid magenta !important; } */
 
 
 /* ---------- Drawer (CSS-only) ---------- */

@@ -22,11 +22,13 @@
       Python renders the board into board_root. -->
       <div class="board-wrap">
         <div class="board-shell">
-          <!-- This is your Designer FlowPanel named overlay_panel -->
-          <div anvil-name="overlay_panel" class="c4-overlay"></div>
-
-          <!-- Python renders the board HTML into this -->
+          <!-- Overlay -->
+          <div class="c4-overlay">
+            <div anvil-name="overlay_panel"></div>
+          </div>
+          <!-- Board -->
           <div anvil-name="board_root"></div>
+
         </div>
       </div>
 

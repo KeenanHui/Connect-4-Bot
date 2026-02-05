@@ -100,23 +100,9 @@ class Form1(Form1Template):
     self.dom_nodes["board_root"].innerHTML = "".join(parts)
     self._update_ghost_positions()
 
-  """
   def drop_piece(self, col: int):
-    r = self._landing_row_for_col(col)
-    if r is None:
-      Notification("Column is full").show()
-      return
-
-    self.board[r][col] = [1.0, 0.0] if self.player == 0 else [0.0, 1.0]
-    self.player = 1 - self.player
-    self.render_board()
-  """
-  
-  def drop_piece(self, col: int):
-    move_player = self.player
-  
     try:
-      resp = anvil.server.call("forward_move_to_lightsail", self.game_id, col, move_player)
+      resp = anvil.server.call("forward_move_to_lightsail", self.game_id, col, self.player)
     except Exception as e:
       Notification(f"Backend error: {e}").show()
       return
@@ -126,10 +112,18 @@ class Form1(Form1Template):
       return
   
     self.board = resp["board"]
-    self.player = 1 - self.player
+    self.player = resp["next_player"]
     self.render_board()
-
+  
+    if resp.get("game_over"):
+      if resp.get("winner") == 0:
+        Notification("Red wins!").show()
+      elif resp.get("winner") == 1:
+        Notification("Yellow wins!").show()
+      else:
+        Notification("Draw!").show()
   
     
-    
-        
+      
+      
+          

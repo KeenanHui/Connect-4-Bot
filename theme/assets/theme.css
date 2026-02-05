@@ -335,3 +335,20 @@ Drawer (CSS-only)
 .drawer-close:hover {
   background: rgba(0,0,0,0.06);
 }
+
+
+
+
+.c4_status {
+  margin-top: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.c4_restart_btn {
+  margin-top: 8px;
+  width: 180px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

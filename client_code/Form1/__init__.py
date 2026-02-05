@@ -2,6 +2,7 @@ from ._anvil_designer import Form1Template
 from anvil import *
 import anvil.server
 from anvil.js import get_dom_node  # ✅ supported way to style DOM
+import uuid
 
 class Form1(Form1Template):
   def __init__(self, **properties):
@@ -17,6 +18,8 @@ class Form1(Form1Template):
 
     self._build_overlay_buttons()
     self.render_board()
+
+    self.game_id = str(uuid.uuid4())
 
   def _make_drop_handler(self, col):
     def handler(**e):
@@ -97,6 +100,7 @@ class Form1(Form1Template):
     self.dom_nodes["board_root"].innerHTML = "".join(parts)
     self._update_ghost_positions()
 
+  """
   def drop_piece(self, col: int):
     r = self._landing_row_for_col(col)
     if r is None:
@@ -106,5 +110,26 @@ class Form1(Form1Template):
     self.board[r][col] = [1.0, 0.0] if self.player == 0 else [0.0, 1.0]
     self.player = 1 - self.player
     self.render_board()
+  """
+  
+  def drop_piece(self, col: int):
+    move_player = self.player
+  
+    try:
+      resp = anvil.server.call("forward_move_to_lightsail", self.game_id, col, move_player)
+    except Exception as e:
+      Notification(f"Backend error: {e}").show()
+      return
+  
+    if not resp.get("ok"):
+      Notification(resp.get("error", "Move rejected")).show()
+      return
+  
+    self.board = resp["board"]
+    self.player = 1 - self.player
+    self.render_board()
 
+  
     
+    
+        

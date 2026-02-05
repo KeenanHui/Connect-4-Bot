@@ -1,5 +1,6 @@
 from ._anvil_designer import Form1Template
 from anvil import *
+import anvil.server
 from anvil.js import get_dom_node  # ✅ supported way to style DOM
 
 class Form1(Form1Template):

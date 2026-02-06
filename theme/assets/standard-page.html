@@ -20,7 +20,7 @@
       <div class="c4-topbar">
         <div anvil-slot="topbar_panel"></div>
       </div>
-      
+
       <div class="board-wrap">
         <div class="board-shell" anvil-name="board_shell">
           <div class="c4-overlay">
@@ -30,7 +30,6 @@
         </div>
       </div>
 
-      <!-- ✅ NEW: controls live directly under the board -->
       <div class="c4-underboard">
         <div anvil-slot="underboard_panel"></div>
       </div>
@@ -42,10 +41,8 @@
     <div class="wrap">© ConnectFour</div>
   </footer>
 
-  <!-- Drawer backdrop (click to close) -->
   <label for="about_toggle" class="drawer-backdrop"></label>
 
-  <!-- Drawer panel -->
   <aside class="drawer" role="dialog" aria-label="About">
     <div class="drawer-header">
       <h2>About</h2>
@@ -57,5 +54,4 @@
       <p>Board state uses a 6×7×2 tensor: red=[1,0], yellow=[0,1], empty=[0,0].</p>
     </div>
   </aside>
-
 </div>

@@ -352,11 +352,3 @@ Drawer (CSS-only)
   margin-left: auto;
   margin-right: auto;
 }
-
-.c4-underboard {
-  width: var(--c4-board-w);
-  margin: 12px auto 0;
-  display: flex;
-  justify-content: center;
-}
-

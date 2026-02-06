@@ -413,3 +413,29 @@ Drawer (CSS-only)
   justify-content: center;
 }
 
+/* Top bar centered to board width */
+.c4-topbar{
+  width: var(--c4-board-w);
+  margin: 0 auto 12px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Give the slot content a clean layout */
+.c4-topbar .anvil-panel-section{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Dropdown styling */
+.anvil-role-c4_model_dd select,
+.anvil-role-c4_model_dd .anvil-dropdown select{
+  width: 220px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.18);
+  padding: 6px 12px;
+  font-weight: 600;
+  background: #fff;
+}
